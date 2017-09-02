@@ -69,6 +69,8 @@ func NewServer(options ServerOptions) *Server {
 		port = defaultPort
 	}
 
+	app.Use(appContextMiddleware(app))
+
 	return &Server{
 		app:    app,
 		listen: fmt.Sprintf("%s:%d", options.Host, port),
