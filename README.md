@@ -12,6 +12,37 @@
 6. Logging 使用[logrus](https://github.com/sirupsen/logrus)，输出格式为JSON
 7. 脚手架代码生成：service, controller, middleware, model, view
 
+## 安装
+
+使用 `go get` 命令安装最新版本。下面的代码同时安装 `gopress` 和它的命令行工具。
+
+```sh
+go get -u github.com/fpay/gopress/gopress
+```
+
+然后在项目中引入 `gopress`
+
+```go
+import "github.com/fpay/gopress"
+```
+
+## 脚手架
+
+按照上面的步骤安装了命令行工具后，就可以使用项目脚手架了。
+
+```sh
+# 生成 users 和 posts 控制器
+gopress make controller users posts
+
+# 生成 login 页面模板
+gopress make view login
+
+# 生成 cache 服务
+gopress make service cache
+```
+
+详情可执行 `gopress make --help` 查看具体使用方法。
+
 ## TODO
 
 1. Project init
