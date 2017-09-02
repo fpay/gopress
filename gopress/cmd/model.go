@@ -54,7 +54,7 @@ var modelCmd = &cobra.Command{
 			if err != nil {
 				er(err)
 			}
-			fmt.Printf("model file created: %s", data.fileName)
+			fmt.Printf("Model file created: %s\n", data.fileName)
 		}
 	},
 }

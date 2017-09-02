@@ -62,7 +62,7 @@ var viewCmd = &cobra.Command{
 			if err != nil {
 				er(err)
 			}
-			fmt.Printf("View file created: %s", data.fileName)
+			fmt.Printf("View file created: %s\n", data.fileName)
 		}
 	},
 }

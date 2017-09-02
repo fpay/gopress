@@ -54,7 +54,7 @@ var serviceCmd = &cobra.Command{
 			if err != nil {
 				er(err)
 			}
-			fmt.Printf("Service file created: %s", data.fileName)
+			fmt.Printf("Service file created: %s\n", data.fileName)
 		}
 	},
 }

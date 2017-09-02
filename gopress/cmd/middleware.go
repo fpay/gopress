@@ -54,7 +54,7 @@ var middlewareCmd = &cobra.Command{
 			if err != nil {
 				er(err)
 			}
-			fmt.Printf("Middleware file created: %s", data.fileName)
+			fmt.Printf("Middleware file created: %s\n", data.fileName)
 		}
 	},
 }

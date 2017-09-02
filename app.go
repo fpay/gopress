@@ -43,3 +43,12 @@ func appContextMiddleware(app *App) MiddlewareFunc {
 		}
 	}
 }
+
+// AppFromContext try to get App instance from Context
+func AppFromContext(ctx Context) *App {
+	ac, ok := ctx.(*AppContext)
+	if !ok {
+		return nil
+	}
+	return ac.App()
+}

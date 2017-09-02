@@ -54,7 +54,7 @@ var controllerCmd = &cobra.Command{
 			if err != nil {
 				er(err)
 			}
-			fmt.Printf("Controller file created: %s", data.fileName)
+			fmt.Printf("Controller file created: %s\n", data.fileName)
 		}
 	},
 }
@@ -76,14 +76,20 @@ import (
 
 // {{.moduleTypeName}} Controller
 type {{.moduleTypeName}} struct {
-	app *gopress.App
+	// Uncomment this line if you want to use services in the app
+	// app *gopress.App
+}
+
+// New{{.moduleTypeName}}Controller returns controller instance
+func New{{.moduleTypeName}}Controller() *{{.moduleTypeName}} {
+	return new({{.moduleTypeName}})
 }
 
 // RegisterRoutes registes routes to app
 // it is used to implements gopress.Controller
 func (c *{{.moduleTypeName}}) RegisterRoutes(app *gopress.App) {
-	// If you want to use services in the app asign app field here
-	c.app = app
+	// Uncomment this line if you want to use services in the app
+	// c.app = app
 
 	app.GET("/{{.sampleRoute}}", c.{{.sampleAction}})
 	// app.POST("/{{.sampleRoute}}", c.SamplePostAction)
@@ -94,7 +100,7 @@ func (c *{{.moduleTypeName}}) RegisterRoutes(app *gopress.App) {
 // {{.sampleAction}} Action
 func (c *{{.moduleTypeName}}) {{.sampleAction}}(ctx gopress.Context) error {
 	// Or you can get app from request context
-	// app := ctx.(*gopress.AppContext).App()
+	// app := gopress.AppFromContext(ctx)
 	data := map[string]interface{}{}
 	return ctx.Render(http.StatusOK, "{{.moduleName}}/sample", data)
 }
