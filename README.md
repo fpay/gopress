@@ -49,3 +49,7 @@ gopress make service cache
 ## Sample Project
 
 [gopress-kick-starter](https://github.com/jerray/gopress-kick-starter)
+
+## License
+
+MIT
