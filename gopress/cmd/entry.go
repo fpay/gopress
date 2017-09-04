@@ -75,7 +75,7 @@ func main() {
 
 	// register middlewares
 	s.RegisterGlobalMiddlewares(
-		gopress.NewLoggingMiddleware("global"),
+		gopress.NewLoggingMiddleware("global", nil),
 	)
 
 	// init and register controllers

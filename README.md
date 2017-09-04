@@ -1,5 +1,7 @@
 # gopress
 
+[![Go Report Card](https://goreportcard.com/badge/github.com/fpay/gopress)](https://goreportcard.com/report/github.com/fpay/gopress)
+
 基于 [Echo](https://echo.labstack.com/) 的应用级Golang Web框架。
 
 ## 特性
