@@ -21,17 +21,13 @@ func (s *Server) App() *App {
 // AppContext is wrapper of echo.Context. It holds App instance of server.
 type AppContext struct {
 	echo.Context
+
 	app *App
 }
 
 // App returns the App instance
 func (c *AppContext) App() *App {
 	return c.app
-}
-
-// Services returns Container of current App
-func (c *AppContext) Services() *Container {
-	return c.app.Services
 }
 
 // appContextMiddleware returns a middleware which extends echo.Context

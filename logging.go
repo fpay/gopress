@@ -24,17 +24,17 @@ func init() {
 	log.SetOutput(os.Stdout)
 }
 
-// SetLoggingLevel 设置日志等级
+// SetLoggingLevel changes logging level
 func (s *Server) SetLoggingLevel(level LoggingLevel) {
 	log.SetLevel(level)
 }
 
-// SetLoggingLevel 设置日志输出
+// SetLoggingOutput changes logging output destination
 func (s *Server) SetLoggingOutput(w io.Writer) {
 	log.SetOutput(w)
 }
 
-// LoggingMiddleware
+// NewLoggingMiddleware returns logging middleware handler function
 func NewLoggingMiddleware(name string) MiddlewareFunc {
 	l := log.StandardLogger()
 	return func(next HandlerFunc) HandlerFunc {
