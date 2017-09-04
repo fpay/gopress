@@ -20,10 +20,9 @@ type commonTemplateData struct {
 }
 
 func validateModuleFileName(module string) string {
-	var res string = module
-	res = strings.Replace(res, "-", "_", -1)
-	res = strings.Replace(res, ".", "_", -1)
-	return res
+	module = strings.Replace(module, "-", "_", -1)
+	module = strings.Replace(module, ".", "_", -1)
+	return module
 }
 
 func validateModuleTypeName(module string) string {
@@ -64,7 +63,7 @@ func checkFileName(fileName string) error {
 	if _, err := os.Stat(fileName); os.IsNotExist(err) {
 		return nil
 	}
-	return fmt.Errorf("File %s already exists.", fileName)
+	return fmt.Errorf("file %s already exists", fileName)
 }
 
 func er(msg interface{}) {
