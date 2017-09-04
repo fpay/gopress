@@ -72,12 +72,12 @@ import (
 	"github.com/fpay/gopress"
 )
 
-// New{{.moduleTypeName}}
+// New{{.moduleTypeName}} returns {{.moduleName}} middleware.
 func New{{.moduleTypeName}}() gopress.MiddlewareFunc {
 	return func(next gopress.HandlerFunc) gopress.HandlerFunc {
 		return func(c gopress.Context) error {
-			// 如果需要在中间件中使用service，可以通过此方式获取App实例，从App中获取服务容器
-			// services := c.(*gopress.AppContext).App().Services()
+			// Uncomment this line if this middleware requires accessing to services.
+			// services := gopress.AppFromContext(c).Services()
 			return next(c)
 		}
 	}

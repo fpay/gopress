@@ -74,19 +74,19 @@ import (
 	"github.com/fpay/gopress"
 )
 
-// {{.moduleTypeName}} Controller
+// {{.moduleTypeName}}
 type {{.moduleTypeName}} struct {
 	// Uncomment this line if you want to use services in the app
 	// app *gopress.App
 }
 
-// New{{.moduleTypeName}}Controller returns controller instance
-func New{{.moduleTypeName}}Controller() *{{.moduleTypeName}} {
+// New{{.moduleTypeName}} returns {{.moduleName}} controller instance.
+func New{{.moduleTypeName}}() *{{.moduleTypeName}} {
 	return new({{.moduleTypeName}})
 }
 
 // RegisterRoutes registes routes to app
-// it is used to implements gopress.Controller
+// It is used to implements gopress.Controller.
 func (c *{{.moduleTypeName}}) RegisterRoutes(app *gopress.App) {
 	// Uncomment this line if you want to use services in the app
 	// c.app = app
@@ -98,6 +98,7 @@ func (c *{{.moduleTypeName}}) RegisterRoutes(app *gopress.App) {
 }
 
 // {{.sampleAction}} Action
+// Parameter gopress.Context is just alias of echo.Context
 func (c *{{.moduleTypeName}}) {{.sampleAction}}(ctx gopress.Context) error {
 	// Or you can get app from request context
 	// app := gopress.AppFromContext(ctx)
@@ -109,7 +110,7 @@ func (c *{{.moduleTypeName}}) {{.sampleAction}}(ctx gopress.Context) error {
 	data := map[string]interface{}{
 		"packageName":    packageName,
 		"moduleName":     moduleName,
-		"moduleTypeName": moduleTypeName,
+		"moduleTypeName": moduleTypeName + "Controller",
 		"sampleAction":   "SampleGetAction",
 		"sampleRoute":    moduleName + "/sample",
 	}

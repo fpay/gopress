@@ -74,13 +74,17 @@ import (
 )
 
 const (
+	// {{.moduleTypeName}}Name is the identity of {{.moduleName}} service
 	{{.moduleTypeName}}Name = "{{.moduleName}}"
 )
 
+// {{.moduleTypeName}} type
 type {{.moduleTypeName}} struct {
-	c *gopress.Container
+	// Uncomment this line if this service has dependence on other services in the container
+	// c *gopress.Container
 }
 
+// New{{.moduleTypeName}} returns instance of {{.moduleName}} service
 func New{{.moduleTypeName}}() *{{.moduleTypeName}} {
 	return new({{.moduleTypeName}})
 }
@@ -92,7 +96,8 @@ func (s *{{.moduleTypeName}}) ServiceName() string {
 
 // RegisterContainer is used to implements gopress.Service
 func (s *{{.moduleTypeName}}) RegisterContainer(c *gopress.Container) {
-	s.c = c
+	// Uncomment this line if this service has dependence on other services in the container
+	// s.c = c
 }
 
 func (s *{{.moduleTypeName}}) SampleMethod() {
