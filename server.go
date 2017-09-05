@@ -31,15 +31,18 @@ type Server struct {
 	listen string
 }
 
+// StaticOptions 静态文件配置
+type StaticOptions struct {
+	Path string `yaml:"path" mapstructure:"path"`
+	Root string `yaml:"root" mapstructure:"root"`
+}
+
 // ServerOptions 服务器配置
 type ServerOptions struct {
-	Host   string `yaml:"host" mapstructure:"path"`
-	Port   int    `yaml:"port" mapstructure:"port"`
-	Views  string `yaml:"views" mapstructure:"views"`
-	Static struct {
-		Path string `yaml:"path" mapstructure:"path"`
-		Root string `yaml:"root" mapstructure:"root"`
-	} `yaml:"static" mapstructure:"static"`
+	Host   string        `yaml:"host" mapstructure:"path"`
+	Port   int           `yaml:"port" mapstructure:"port"`
+	Views  string        `yaml:"views" mapstructure:"views"`
+	Static StaticOptions `yaml:"static" mapstructure:"static"`
 }
 
 // NewServer 创建HTTP服务器

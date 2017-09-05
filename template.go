@@ -28,10 +28,7 @@ func NewTemplateRenderer(root string) echo.Renderer {
 		templates: new(sync.Map),
 	}
 
-	err := t.registerGlobalPartials()
-	if err != nil {
-		panic(err)
-	}
+	t.registerGlobalPartials()
 
 	return t
 }
