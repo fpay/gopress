@@ -1,0 +1,11 @@
+language: go
+
+go:
+  - 1.9.x
+  - master
+
+script:
+  - make test
+
+after_success:
+  - bash <(curl -s https://codecov.io/bash) -f coverage.out

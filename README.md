@@ -1,6 +1,8 @@
 # gopress
 
+[![Build Status](https://travis-ci.org/fpay/gopress.svg)](https://travis-ci.org/fpay/gopress)
 [![Go Report Card](https://goreportcard.com/badge/github.com/fpay/gopress)](https://goreportcard.com/report/github.com/fpay/gopress)
+[![codecov](https://codecov.io/gh/fpay/gopress/branch/master/graph/badge.svg)](https://codecov.io/gh/fpay/gopress)
 
 基于 [Echo](https://echo.labstack.com/) 的应用级Golang Web框架。
 
