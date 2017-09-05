@@ -4,6 +4,11 @@ go:
   - 1.9.x
   - master
 
+install:
+  - go get -u github.com/labstack/echo
+  - go get -u github.com/aymerick/raymond
+  - go get -u github.com/sirupsen/logrus
+
 script:
   - make test
 
