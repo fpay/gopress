@@ -13,6 +13,7 @@ import (
 type LoggingLevel = logrus.Level
 
 var (
+	defaultLoggingOutput    = os.Stdout
 	defaultLoggingFormatter = &logrus.JSONFormatter{}
 	defaultLoggingLevel     = logrus.DebugLevel
 	defaultLogger           = NewLogger()
@@ -26,7 +27,7 @@ type Logger struct {
 
 // NewLogger returns a Logger instance
 func NewLogger() *Logger {
-	l := &Logger{logrus.StandardLogger()}
+	l := &Logger{&logrus.Logger{}}
 	l.SetLevel(defaultLoggingLevel)
 	l.SetOutput(os.Stdout)
 	l.SetFormatter(defaultLoggingFormatter)

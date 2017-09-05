@@ -25,9 +25,6 @@ func NewContainer() *Container {
 
 // Register 注册服务到容器
 func (c *Container) Register(svc Service) {
-	if svc == nil {
-		return
-	}
 	c.m.Store(svc.ServiceName(), svc)
 	svc.RegisterContainer(c)
 }
