@@ -68,8 +68,11 @@ func NewServer(options ServerOptions) *Server {
 
 	logger := NewLogger()
 
+	e := echo.New()
+	e.Logger = logger
+
 	app := &App{
-		Echo:     echo.New(),
+		Echo:     e,
 		Logger:   logger,
 		Services: NewContainer(),
 	}
