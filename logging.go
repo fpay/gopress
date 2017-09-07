@@ -146,6 +146,7 @@ func NewLoggingMiddleware(name string, logger *Logger) MiddlewareFunc {
 
 			if err := next(c); err != nil {
 				c.Error(err)
+				entry = entry.WithError(err)
 			}
 
 			latency := time.Since(start)
