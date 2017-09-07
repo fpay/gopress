@@ -144,19 +144,19 @@ func NewLoggingMiddleware(name string, logger *Logger) MiddlewareFunc {
 				"scope":    name,
 			})
 
+			entryFields := logrus.Fields{}
 			if err := next(c); err != nil {
 				c.Error(err)
+				entryFields["error"] = err.Error()
 			}
 
 			latency := time.Since(start)
 
 			resp := c.Response()
-			entry.WithFields(logrus.Fields{
-				"status":    resp.Status,
-				"bytes_out": resp.Size,
-				"latency":   fmt.Sprintf("%.3f", latency.Seconds()*1000),
-			}).Info("request completes.")
-
+			entryFields["status"] = resp.Status
+			entryFields["bytes_out"] = resp.Size
+			entryFields["latency"] = fmt.Sprintf("%.3f ms", latency.Seconds()*1000)
+			entry.WithFields(entryFields).Info("request completes.")
 			return nil
 		}
 	}
