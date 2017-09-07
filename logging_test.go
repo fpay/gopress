@@ -149,6 +149,10 @@ func TestNewLoggingMiddleware(t *testing.T) {
 		t.Errorf("expect test logging output in app buffer not empty")
 	}
 
+	if !bytes.Contains(buf.Bytes(), []byte(`"error":"test error"`)) {
+	    t.Errorf("expect test logging contains (%s)", `"error":"test error"` )
+	}
+
 	if !bytes.Contains(buf.Bytes(), []byte(`"level":"error"`)) {
 		t.Errorf("expect test loggint contains level error")
 	}
