@@ -40,6 +40,10 @@ func TestAppContextMiddleware(t *testing.T) {
 func TestAppAddMiddlewareGroup(t *testing.T) {
 	app := &App{}
 	app.Echo = echo.New()
+	g1 := app.GetRouteGroup("/hello")
+	if g1 == nil {
+		t.Errorf("get no middleware group failed")
+	}
 
 	m := make([]MiddlewareFunc, 0)
 	m = append(m, NewLoggingMiddleware("global", NewLogger()))
@@ -50,7 +54,6 @@ func TestAppAddMiddlewareGroup(t *testing.T) {
 	}
 
 	if len(m2) != 1 {
-
 		t.Errorf("expect middlewaregroup len is 1, got %d", len(m2))
 	}
 
@@ -61,5 +64,10 @@ func TestAppAddMiddlewareGroup(t *testing.T) {
 	g := app.GetRouteGroup("/hello")
 	if reflect.TypeOf(g).String() != reflect.TypeOf(&echo.Group{}).String() {
 		t.Errorf("expect group's type is *echo.Group, got %v", g)
+	}
+
+	_, ok = app.MiddlewareGroup["/notwell"]
+	if ok {
+		t.Errorf("expect no /notwell group, but it's exists ")
 	}
 }
