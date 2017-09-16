@@ -49,7 +49,7 @@ func AppFromContext(ctx Context) *App {
 
 // GetGroup get a middlware group
 func (app *App) GetRouteGroup(prefix string) *echo.Group {
-	g := app.Echo.Group(prefix)
+	g := app.Group(prefix)
 	if app.MiddlewareGroup == nil {
 		return g
 	}

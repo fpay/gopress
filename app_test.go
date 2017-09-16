@@ -39,6 +39,8 @@ func TestAppContextMiddleware(t *testing.T) {
 
 func TestAppAddMiddlewareGroup(t *testing.T) {
 	app := &App{}
+	app.Echo = echo.New()
+
 	m := make([]MiddlewareFunc, 0)
 	m = append(m, NewLoggingMiddleware("global", NewLogger()))
 	app.AddMiddlewareGroup("/hello", m)
@@ -54,5 +56,10 @@ func TestAppAddMiddlewareGroup(t *testing.T) {
 
 	if reflect.TypeOf(m2[0]).String() != reflect.TypeOf(m[0]).String() {
 		t.Errorf("expect type  []middlewareFunc, got %s", reflect.TypeOf(m2).String())
+	}
+
+	g := app.GetRouteGroup("/hello")
+	if reflect.TypeOf(g).String() != reflect.TypeOf(&echo.Group{}).String() {
+		t.Errorf("expect group's type is *echo.Group, got %v", g)
 	}
 }
