@@ -66,8 +66,8 @@ func TestAppAddMiddlewareGroup(t *testing.T) {
 		t.Errorf("expect group's type is *echo.Group, got %v", g)
 	}
 
-	_, ok = app.MiddlewareGroup["/notwell"]
-	if ok {
-		t.Errorf("expect no /notwell group, but it's exists ")
+	g2 := app.GetRouteGroup("/notwell")
+	if g2 == nil {
+		t.Errorf("expect no middleware group, but it's nil")
 	}
 }
