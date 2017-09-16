@@ -3,6 +3,7 @@ package gopress
 import (
 	"net/http"
 	"net/http/httptest"
+	"reflect"
 	"testing"
 
 	"github.com/labstack/echo"
@@ -33,5 +34,32 @@ func TestAppContextMiddleware(t *testing.T) {
 
 	if c, ok := actual.(*AppContext); !ok {
 		t.Errorf("expect context is AppContext, actual is %#v", c)
+	}
+}
+
+func TestAppAddMiddlewareGroup(t *testing.T) {
+	app := &App{}
+	app.Echo = echo.New()
+
+	m := make([]MiddlewareFunc, 0)
+	m = append(m, NewLoggingMiddleware("global", NewLogger()))
+	app.AddMiddlewareGroup("/hello", m)
+	m2, ok := app.MiddlewareGroup["/hello"]
+	if !ok {
+		t.Errorf("expect prefix:/hello's middlewarefunc exists, but not")
+	}
+
+	if len(m2) != 1 {
+
+		t.Errorf("expect middlewaregroup len is 1, got %d", len(m2))
+	}
+
+	if reflect.TypeOf(m2[0]).String() != reflect.TypeOf(m[0]).String() {
+		t.Errorf("expect type  []middlewareFunc, got %s", reflect.TypeOf(m2).String())
+	}
+
+	g := app.GetRouteGroup("/hello")
+	if reflect.TypeOf(g).String() != reflect.TypeOf(&echo.Group{}).String() {
+		t.Errorf("expect group's type is *echo.Group, got %v", g)
 	}
 }
