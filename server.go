@@ -79,7 +79,7 @@ func NewServer(options ServerOptions) *Server {
 
 	app.Renderer = NewTemplateRenderer(tplRoot)
 	app.Static(staticPath, staticRoot)
-	app.Use(appContextMiddleware(app))
+	app.Use(NewAppContextMiddleware(app))
 
 	return &Server{
 		Logger: logger,

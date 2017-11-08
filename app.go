@@ -24,8 +24,8 @@ func (c *AppContext) App() *App {
 	return c.app
 }
 
-// appContextMiddleware returns a middleware which extends echo.Context
-func appContextMiddleware(app *App) MiddlewareFunc {
+// NewAppContextMiddleware returns a middleware which extends echo.Context
+func NewAppContextMiddleware(app *App) MiddlewareFunc {
 	return func(next HandlerFunc) echo.HandlerFunc {
 		return func(c Context) error {
 			ac := &AppContext{c, app}

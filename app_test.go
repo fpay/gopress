@@ -25,7 +25,7 @@ func TestAppContextMiddleware(t *testing.T) {
 
 	app := &App{}
 	var actual Context
-	h := appContextMiddleware(app)(func(c Context) error {
+	h := NewAppContextMiddleware(app)(func(c Context) error {
 		actual = c
 		return c.String(http.StatusOK, "test context")
 	})
