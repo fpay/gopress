@@ -131,7 +131,7 @@ func TestNewLoggingMiddleware(t *testing.T) {
 	h = NewLoggingMiddleware("app logger", nil)(func(c Context) error {
 		return c.String(http.StatusOK, "test")
 	})
-	h(&AppContext{c, app})
+	h(&AppContext{c, app, app.Logger.WithFields(nil)})
 
 	if buf.Len() == 0 {
 		t.Errorf("expect test logging output in app buffer not empty")
@@ -143,14 +143,14 @@ func TestNewLoggingMiddleware(t *testing.T) {
 	h = NewLoggingMiddleware("handler error", nil)(func(c Context) error {
 		return errors.New("test error")
 	})
-	h(&AppContext{c, app})
+	h(&AppContext{c, app, app.Logger.WithFields(nil)})
 
 	if buf.Len() == 0 {
 		t.Errorf("expect test logging output in app buffer not empty")
 	}
 
 	if !bytes.Contains(buf.Bytes(), []byte(`"error":"test error"`)) {
-	    t.Errorf("expect test logging contains (%s)", `"error":"test error"` )
+		t.Errorf("expect test logging contains (%s)", `"error":"test error"`)
 	}
 
 	if !bytes.Contains(buf.Bytes(), []byte(`"level":"error"`)) {

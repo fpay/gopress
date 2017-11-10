@@ -23,7 +23,9 @@ func TestAppContextMiddleware(t *testing.T) {
 	res := httptest.NewRecorder()
 	c := e.NewContext(req, res)
 
-	app := &App{}
+	app := &App{
+		Logger: defaultLogger,
+	}
 	var actual Context
 	h := NewAppContextMiddleware(app)(func(c Context) error {
 		actual = c

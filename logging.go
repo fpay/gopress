@@ -116,16 +116,12 @@ func NewLoggingMiddleware(name string, logger *Logger) MiddlewareFunc {
 
 	// getLogger returns Logger. If user specify a logger when creating middleware, returns it.
 	// If not, try to returns App's logger. If app is not found on the context, returns the default logger.
-	getLogger := func(c Context) *Logger {
+	getLogger := func(c Context) *logrus.Entry {
 		if logger != nil {
-			return logger
+			return logger.WithFields(nil)
 		}
 
-		if app := AppFromContext(c); app != nil {
-			return app.Logger
-		}
-
-		return defaultLogger
+		return RequestLogger(c)
 	}
 
 	return func(next HandlerFunc) HandlerFunc {
