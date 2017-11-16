@@ -121,7 +121,7 @@ func NewLoggingMiddleware(name string, logger *Logger) MiddlewareFunc {
 			return logger.WithFields(nil)
 		}
 
-		return RequestLogger(c)
+		return ContextLogger(c)
 	}
 
 	return func(next HandlerFunc) HandlerFunc {

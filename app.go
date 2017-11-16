@@ -2,7 +2,7 @@ package gopress
 
 import (
 	"github.com/labstack/echo"
-	uuid "github.com/satori/go.uuid"
+	"github.com/rs/xid"
 	"github.com/sirupsen/logrus"
 )
 
@@ -42,7 +42,7 @@ func NewAppContextMiddleware(app *App) MiddlewareFunc {
 		return func(c Context) error {
 
 			// setup request id
-			requestID := uuid.NewV4().String()
+			requestID := xid.New().String()
 			c.Set(requestIDContextKey, requestID)
 			logger := app.Logger.WithField("request_id", requestID)
 
@@ -53,8 +53,8 @@ func NewAppContextMiddleware(app *App) MiddlewareFunc {
 	}
 }
 
-// AppFromContext try to get App instance from Context
-func AppFromContext(ctx Context) *App {
+// ContextApp try to get App instance from Context
+func ContextApp(ctx Context) *App {
 	ac, ok := ctx.(*AppContext)
 	if !ok {
 		return nil
@@ -62,16 +62,16 @@ func AppFromContext(ctx Context) *App {
 	return ac.App()
 }
 
-// RequestLogger returns logger entry for current request context
-func RequestLogger(ctx Context) *logrus.Entry {
+// ContextLogger returns logger entry for current request context
+func ContextLogger(ctx Context) *logrus.Entry {
 	if ctx, ok := ctx.(*AppContext); ok {
 		return ctx.RequestLogger()
 	}
 	return defaultLogger.WithField("request_id", "")
 }
 
-// RequestID returns ID for current request
-func RequestID(ctx Context) string {
+// ContextRequestID returns ID for current request
+func ContextRequestID(ctx Context) string {
 	if id, ok := ctx.Get(requestIDContextKey).(string); ok {
 		return id
 	}
