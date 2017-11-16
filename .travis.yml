@@ -8,7 +8,7 @@ install:
   - go get -u github.com/labstack/echo
   - go get -u github.com/aymerick/raymond
   - go get -u github.com/sirupsen/logrus
-  - go get -u github.com/satori/go.uuid
+  - go get -u github.com/rs/xid
 
 script:
   - make test
