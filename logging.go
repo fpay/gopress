@@ -130,14 +130,18 @@ func NewLoggingMiddleware(name string, logger *Logger) MiddlewareFunc {
 			start := time.Now()
 
 			req := c.Request()
+
+			httpFields := logrus.Fields{
+				"host":     req.Host,
+				"remote":   RequestRemoteAddr(req),
+				"method":   req.Method,
+				"uri":      req.RequestURI,
+				"referer":  req.Referer(),
+				"bytes_in": req.ContentLength,
+			}
 			entry := l.WithFields(logrus.Fields{
-				"http.host":     req.Host,
-				"http.remote":   RequestRemoteAddr(req),
-				"http.method":   req.Method,
-				"http.uri":      req.RequestURI,
-				"http.referer":  req.Referer(),
-				"http.bytes_in": req.ContentLength,
-				"scope":         name,
+				"scope": name,
+				"http":  httpFields,
 			})
 
 			if err := next(c); err != nil {
@@ -148,10 +152,12 @@ func NewLoggingMiddleware(name string, logger *Logger) MiddlewareFunc {
 			latency := time.Since(start)
 
 			resp := c.Response()
+
+			httpFields["status"] = resp.Status
+			httpFields["bytes_out"] = resp.Size
+			httpFields["latency"] = fmt.Sprintf("%.3f", latency.Seconds()*1000)
 			entry.WithFields(logrus.Fields{
-				"http.status":    resp.Status,
-				"http.bytes_out": resp.Size,
-				"http.latency":   fmt.Sprintf("%.3f", latency.Seconds()*1000),
+				"http": httpFields,
 			}).Info("request completes.")
 
 			return nil
