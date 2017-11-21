@@ -131,13 +131,13 @@ func NewLoggingMiddleware(name string, logger *Logger) MiddlewareFunc {
 
 			req := c.Request()
 			entry := l.WithFields(logrus.Fields{
-				"host":     req.Host,
-				"remote":   req.RemoteAddr,
-				"method":   req.Method,
-				"uri":      req.RequestURI,
-				"referer":  req.Referer(),
-				"bytes_in": req.ContentLength,
-				"scope":    name,
+				"http.host":     req.Host,
+				"http.remote":   RequestRemoteAddr(req),
+				"http.method":   req.Method,
+				"http.uri":      req.RequestURI,
+				"http.referer":  req.Referer(),
+				"http.bytes_in": req.ContentLength,
+				"scope":         name,
 			})
 
 			if err := next(c); err != nil {
@@ -149,9 +149,9 @@ func NewLoggingMiddleware(name string, logger *Logger) MiddlewareFunc {
 
 			resp := c.Response()
 			entry.WithFields(logrus.Fields{
-				"status":    resp.Status,
-				"bytes_out": resp.Size,
-				"latency":   fmt.Sprintf("%.3f", latency.Seconds()*1000),
+				"http.status":    resp.Status,
+				"http.bytes_out": resp.Size,
+				"http.latency":   fmt.Sprintf("%.3f", latency.Seconds()*1000),
 			}).Info("request completes.")
 
 			return nil
