@@ -98,7 +98,9 @@ func TestNewLoggingMiddleware(t *testing.T) {
 
 	// test with global logger
 	testLoggingOutput.Reset()
-	h = NewLoggingMiddleware("default logger", nil)(func(c Context) error {
+	h = NewLoggingMiddleware(LoggingMiddlewareConfig{
+		Name: "default logger",
+	})(func(c Context) error {
 		return c.String(http.StatusOK, "test")
 	})
 	h(c)
@@ -112,7 +114,10 @@ func TestNewLoggingMiddleware(t *testing.T) {
 	buf = new(bytes.Buffer)
 	l = NewLogger()
 	l.SetOutput(buf)
-	h = NewLoggingMiddleware("test logger", l)(func(c Context) error {
+	h = NewLoggingMiddleware(LoggingMiddlewareConfig{
+		Name:   "test logger",
+		Logger: l,
+	})(func(c Context) error {
 		return c.String(http.StatusOK, "test")
 	})
 	h(c)
@@ -128,7 +133,9 @@ func TestNewLoggingMiddleware(t *testing.T) {
 	buf = new(bytes.Buffer)
 	app := &App{Logger: NewLogger()}
 	app.Logger.SetOutput(buf)
-	h = NewLoggingMiddleware("app logger", nil)(func(c Context) error {
+	h = NewLoggingMiddleware(LoggingMiddlewareConfig{
+		Name: "app logger",
+	})(func(c Context) error {
 		return c.String(http.StatusOK, "test")
 	})
 	h(&AppContext{c, app, app.Logger.WithFields(nil)})
@@ -140,7 +147,9 @@ func TestNewLoggingMiddleware(t *testing.T) {
 	// test with handler error
 	buf.Reset()
 	e.Logger = app.Logger
-	h = NewLoggingMiddleware("handler error", nil)(func(c Context) error {
+	h = NewLoggingMiddleware(LoggingMiddlewareConfig{
+		Name: "handler error",
+	})(func(c Context) error {
 		return errors.New("test error")
 	})
 	h(&AppContext{c, app, app.Logger.WithFields(nil)})

@@ -6,6 +6,7 @@ import (
 	"os"
 	"time"
 
+	"github.com/labstack/echo/middleware"
 	"github.com/labstack/gommon/log"
 	"github.com/sirupsen/logrus"
 )
@@ -111,8 +112,22 @@ func (l *Logger) Panicj(j log.JSON) {
 	l.WithFields(logrus.Fields(j)).Panic()
 }
 
+type LoggingMiddlewareConfig struct {
+	Name    string
+	Logger  *Logger
+	Skipper middleware.Skipper
+}
+
 // NewLoggingMiddleware returns a middleware which logs every request
-func NewLoggingMiddleware(name string, logger *Logger) MiddlewareFunc {
+func NewLoggingMiddleware(opts LoggingMiddlewareConfig) MiddlewareFunc {
+
+	name := opts.Name
+	logger := opts.Logger
+	skipper := opts.Skipper
+
+	if skipper == nil {
+		skipper = middleware.DefaultSkipper
+	}
 
 	// getLogger returns Logger. If user specify a logger when creating middleware, returns it.
 	// If not, try to returns App's logger. If app is not found on the context, returns the default logger.
@@ -126,6 +141,10 @@ func NewLoggingMiddleware(name string, logger *Logger) MiddlewareFunc {
 
 	return func(next HandlerFunc) HandlerFunc {
 		return func(c Context) error {
+			if skipper(c) {
+				return next(c)
+			}
+
 			l := getLogger(c)
 			start := time.Now()
 
