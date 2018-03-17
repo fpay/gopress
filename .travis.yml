@@ -10,6 +10,7 @@ install:
   - go get -u github.com/sirupsen/logrus
   - go get -u github.com/rs/xid
   - go get -u github.com/stretchr/testify
+  - go get -u github.com/labstack/echo/middleware
 
 script:
   - make test
