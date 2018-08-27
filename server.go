@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/fpay/gopress/log"
 	"github.com/labstack/echo"
 )
 
@@ -66,7 +67,7 @@ func NewServer(options ServerOptions) *Server {
 		port = defaultPort
 	}
 
-	logger := NewLogger()
+	logger := log.NewLogger()
 
 	e := echo.New()
 	e.Logger = logger

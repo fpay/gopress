@@ -1,6 +1,7 @@
 package gopress
 
 import (
+	"github.com/fpay/gopress/log"
 	"github.com/labstack/echo"
 	"github.com/rs/xid"
 	"github.com/sirupsen/logrus"
@@ -44,7 +45,9 @@ func NewAppContextMiddleware(app *App) MiddlewareFunc {
 			// setup request id
 			requestID := xid.New().String()
 			c.Set(requestIDContextKey, requestID)
+
 			logger := app.Logger.WithField("request_id", requestID)
+			log.WithLogger(c, logger)
 
 			ac := &AppContext{c, app, logger}
 
@@ -63,15 +66,12 @@ func ContextApp(ctx Context) *App {
 }
 
 // ContextLogger returns logger entry for current request context
-func ContextLogger(ctx Context) *logrus.Entry {
-	if ctx, ok := ctx.(*AppContext); ok {
-		return ctx.RequestLogger()
-	}
-	return defaultLogger.WithField("request_id", "")
-}
+var ContextLogger = log.Extract
 
-// ContextRequestID returns ID for current request
-func ContextRequestID(ctx Context) string {
+var ContextRequestID = ExtractRequestID
+
+// ExtractRequestID returns ID for current request
+func ExtractRequestID(ctx Context) string {
 	if id, ok := ctx.Get(requestIDContextKey).(string); ok {
 		return id
 	}

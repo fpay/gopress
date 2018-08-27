@@ -1,27 +1,24 @@
-package gopress
+package middlewares
 
 import (
 	"fmt"
 	"time"
 
 	"github.com/fpay/gopress/log"
+	"github.com/fpay/gopress/utils"
+	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
 	"github.com/sirupsen/logrus"
 )
 
-// Logger wraps logrus.Logger
-type Logger = log.Logger
-
-var defaultLogger = log.DefaultLogger
-
 type LoggingMiddlewareConfig struct {
 	Name    string
-	Logger  *Logger
+	Logger  *log.Logger
 	Skipper middleware.Skipper
 }
 
 // NewLoggingMiddleware returns a middleware which logs every request
-func NewLoggingMiddleware(opts LoggingMiddlewareConfig) MiddlewareFunc {
+func NewLoggingMiddleware(opts LoggingMiddlewareConfig) echo.MiddlewareFunc {
 
 	name := opts.Name
 	logger := opts.Logger
@@ -32,17 +29,16 @@ func NewLoggingMiddleware(opts LoggingMiddlewareConfig) MiddlewareFunc {
 	}
 
 	// getLogger returns Logger. If user specify a logger when creating middleware, returns it.
-	// If not, try to returns App's logger. If app is not found on the context, returns the default logger.
-	getLogger := func(c Context) *logrus.Entry {
+	// If not, extract logger from context.
+	getLogger := func(c echo.Context) *logrus.Entry {
 		if logger != nil {
 			return logger.WithFields(nil)
 		}
-
-		return ContextLogger(c)
+		return log.Extract(c)
 	}
 
-	return func(next HandlerFunc) HandlerFunc {
-		return func(c Context) error {
+	return func(next echo.HandlerFunc) echo.HandlerFunc {
+		return func(c echo.Context) error {
 			if skipper(c) {
 				return next(c)
 			}
@@ -54,7 +50,7 @@ func NewLoggingMiddleware(opts LoggingMiddlewareConfig) MiddlewareFunc {
 
 			httpFields := logrus.Fields{
 				"host":     req.Host,
-				"remote":   RequestRemoteAddr(req),
+				"remote":   utils.RequestRemoteAddr(req),
 				"method":   req.Method,
 				"uri":      req.RequestURI,
 				"referer":  req.Referer(),
