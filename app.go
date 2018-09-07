@@ -27,6 +27,10 @@ type AppContext struct {
 	logger *logrus.Entry
 }
 
+func NewAppContext(c echo.Context, app *App, logger *logrus.Entry) *AppContext {
+	return &AppContext{c, app, logger}
+}
+
 // App returns the App instance
 func (c *AppContext) App() *App {
 	return c.app

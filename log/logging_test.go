@@ -1,15 +1,11 @@
-package gopress
+package log
 
 import (
 	"bytes"
-	"errors"
 	"io"
-	"net/http"
-	"net/http/httptest"
 	"os"
 	"testing"
 
-	"github.com/labstack/echo"
 	"github.com/labstack/gommon/log"
 	"github.com/sirupsen/logrus"
 )
@@ -19,7 +15,7 @@ var (
 )
 
 func init() {
-	defaultLogger.SetOutput(testLoggingOutput)
+	DefaultLogger.SetOutput(testLoggingOutput)
 }
 
 func TestLoggerSetOutput(t *testing.T) {
@@ -83,87 +79,6 @@ func TestLoggingPrefix(t *testing.T) {
 		if actual != expect {
 			t.Errorf("expect prefix is %v, actual is %v", expect, actual)
 		}
-	}
-}
-
-func TestNewLoggingMiddleware(t *testing.T) {
-	e := echo.New()
-	req := httptest.NewRequest(echo.POST, "/", nil)
-	res := httptest.NewRecorder()
-	c := e.NewContext(req, res)
-
-	var l *Logger
-	var h HandlerFunc
-	var buf *bytes.Buffer
-
-	// test with global logger
-	testLoggingOutput.Reset()
-	h = NewLoggingMiddleware(LoggingMiddlewareConfig{
-		Name: "default logger",
-	})(func(c Context) error {
-		return c.String(http.StatusOK, "test")
-	})
-	h(c)
-
-	if testLoggingOutput.Len() == 0 {
-		t.Errorf("expect test logging output in global buffer not empty")
-	}
-	testLoggingOutput.Reset()
-
-	// test with custom logger
-	buf = new(bytes.Buffer)
-	l = NewLogger()
-	l.SetOutput(buf)
-	h = NewLoggingMiddleware(LoggingMiddlewareConfig{
-		Name:   "test logger",
-		Logger: l,
-	})(func(c Context) error {
-		return c.String(http.StatusOK, "test")
-	})
-	h(c)
-
-	if buf.Len() == 0 {
-		t.Errorf("expect test logging output in function buffer not empty")
-	}
-	if testLoggingOutput.Len() > 0 {
-		t.Errorf("expect test logging output in global buffer empty")
-	}
-
-	// test with app logger
-	buf = new(bytes.Buffer)
-	app := &App{Logger: NewLogger()}
-	app.Logger.SetOutput(buf)
-	h = NewLoggingMiddleware(LoggingMiddlewareConfig{
-		Name: "app logger",
-	})(func(c Context) error {
-		return c.String(http.StatusOK, "test")
-	})
-	h(&AppContext{c, app, app.Logger.WithFields(nil)})
-
-	if buf.Len() == 0 {
-		t.Errorf("expect test logging output in app buffer not empty")
-	}
-
-	// test with handler error
-	buf.Reset()
-	e.Logger = app.Logger
-	h = NewLoggingMiddleware(LoggingMiddlewareConfig{
-		Name: "handler error",
-	})(func(c Context) error {
-		return errors.New("test error")
-	})
-	h(&AppContext{c, app, app.Logger.WithFields(nil)})
-
-	if buf.Len() == 0 {
-		t.Errorf("expect test logging output in app buffer not empty")
-	}
-
-	if !bytes.Contains(buf.Bytes(), []byte(`"error":"test error"`)) {
-		t.Errorf("expect test logging contains (%s)", `"error":"test error"`)
-	}
-
-	if !bytes.Contains(buf.Bytes(), []byte(`"level":"error"`)) {
-		t.Errorf("expect test loggint contains level error")
 	}
 }
 
