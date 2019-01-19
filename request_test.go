@@ -49,3 +49,23 @@ func TestRequestRemoteAddr(t *testing.T) {
 		assert.Equal(t, c.expect, RequestRemoteAddr(req), "remote addr should match")
 	}
 }
+
+func TestRequestIsAJAX(t *testing.T) {
+	cases := []struct {
+		header string
+		value  string
+		expect bool
+	}{
+		{"X-Requested-With", "", false},
+		{"X-Requested-With", "XMLHttpRequest", true},
+		{"X-Requested-With", "JSONHttpRequest", false},
+		{"X-Gopress-Content", "Whatever", false},
+	}
+
+	for _, c := range cases {
+		req, _ := http.NewRequest("GET", "/", nil)
+		req.Header.Set(c.header, c.value)
+
+		assert.Equal(t, c.expect, RequestIsAJAX(req), "ajax checking should match")
+	}
+}

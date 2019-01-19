@@ -11,6 +11,9 @@ var (
 
 	// RequestHeaderForwarded header for identifying the originating IP address of a client connecting to a web server through an HTTP proxy or a load balancer.
 	RequestHeaderForwarded = "X-Forwarded-For"
+
+	// RequestHeaderRequestedWith header for JavaScript libraries sending requests from browser.
+	RequestHeaderRequestedWith = "X-Requested-With"
 )
 
 const (
@@ -59,4 +62,9 @@ func RequestRemoteAddr(req *http.Request) string {
 		return req.RemoteAddr
 	}
 	return s
+}
+
+// RequestIsAJAX check request header to see if the request is a XMLHttpRequest.
+func RequestIsAJAX(req *http.Request) bool {
+	return "XMLHttpRequest" == req.Header.Get(RequestHeaderRequestedWith)
 }
