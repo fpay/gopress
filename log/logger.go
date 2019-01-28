@@ -44,6 +44,8 @@ func (l *Logger) Output() io.Writer {
 	return l.Logger.Out
 }
 
+func (l *Logger) SetHeader(h string) {}
+
 // SetOutput changes logger's output destination
 func (l *Logger) SetOutput(w io.Writer) {
 	l.Logger.Out = w
