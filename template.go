@@ -9,7 +9,7 @@ import (
 	"sync"
 
 	"github.com/aymerick/raymond"
-	"github.com/labstack/echo"
+	"github.com/labstack/echo/v4"
 )
 
 const handlebarsExtension = "handlebars"

@@ -6,14 +6,13 @@ import (
 
 	"github.com/fpay/gopress/log"
 	"github.com/fpay/gopress/utils"
-	"github.com/labstack/echo"
-	"github.com/labstack/echo/middleware"
+	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
 	"github.com/sirupsen/logrus"
 )
 
 type LoggingMiddlewareConfig struct {
 	Name    string
-	Logger  *log.Logger
 	Skipper middleware.Skipper
 }
 
@@ -21,20 +20,10 @@ type LoggingMiddlewareConfig struct {
 func NewLoggingMiddleware(opts LoggingMiddlewareConfig) echo.MiddlewareFunc {
 
 	name := opts.Name
-	logger := opts.Logger
 	skipper := opts.Skipper
 
 	if skipper == nil {
 		skipper = middleware.DefaultSkipper
-	}
-
-	// getLogger returns Logger. If user specify a logger when creating middleware, returns it.
-	// If not, extract logger from context.
-	getLogger := func(c echo.Context) *logrus.Entry {
-		if logger != nil {
-			return logger.WithFields(nil)
-		}
-		return log.Extract(c)
 	}
 
 	return func(next echo.HandlerFunc) echo.HandlerFunc {
@@ -43,7 +32,7 @@ func NewLoggingMiddleware(opts LoggingMiddlewareConfig) echo.MiddlewareFunc {
 				return next(c)
 			}
 
-			l := getLogger(c)
+			l := log.Extract(c)
 			start := time.Now()
 
 			req := c.Request()

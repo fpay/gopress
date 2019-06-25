@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"github.com/fpay/gopress/log"
-	"github.com/labstack/echo"
+	"github.com/labstack/echo/v4"
 )
 
 const (
