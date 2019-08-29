@@ -75,7 +75,6 @@ func NewServer(options ServerOptions) *Server {
 	app := &App{
 		Echo:     e,
 		Logger:   logger,
-		Services: NewContainer(),
 	}
 
 	app.Renderer = NewTemplateRenderer(tplRoot)
@@ -119,11 +118,4 @@ func (s *Server) RegisterControllers(cs ...Controller) {
 // RegisterGlobalMiddlewares 注册全局中间件
 func (s *Server) RegisterGlobalMiddlewares(middlewares ...MiddlewareFunc) {
 	s.app.Use(middlewares...)
-}
-
-// RegisterServices 注册服务到server app的服务容器
-func (s *Server) RegisterServices(services ...Service) {
-	for _, svc := range services {
-		s.app.Services.Register(svc)
-	}
 }

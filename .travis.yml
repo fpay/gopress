@@ -1,16 +1,14 @@
 language: go
 
 go:
-  - 1.9.x
+  - 1.11.x
+  - 1.12.x
   - master
 
-install:
-  - go get -u github.com/labstack/echo
-  - go get -u github.com/aymerick/raymond
-  - go get -u github.com/sirupsen/logrus
-  - go get -u github.com/rs/xid
-  - go get -u github.com/stretchr/testify
-  - go get -u github.com/labstack/echo/middleware
+env:
+  - GO111MODULE=on
+
+install: true
 
 script:
   - make test

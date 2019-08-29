@@ -89,17 +89,6 @@ func New{{.moduleTypeName}}() *{{.moduleTypeName}} {
 	return new({{.moduleTypeName}})
 }
 
-// ServiceName is used to implements gopress.Service
-func (s *{{.moduleTypeName}}) ServiceName() string {
-	return {{.moduleTypeName}}Name
-}
-
-// RegisterContainer is used to implements gopress.Service
-func (s *{{.moduleTypeName}}) RegisterContainer(c *gopress.Container) {
-	// Uncomment this line if this service has dependence on other services in the container
-	// s.c = c
-}
-
 func (s *{{.moduleTypeName}}) SampleMethod() {
 }
 `

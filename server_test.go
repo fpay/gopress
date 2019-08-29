@@ -56,13 +56,3 @@ func TestRegisterControllers(t *testing.T) {
 		t.Errorf("expect server app passed to controller")
 	}
 }
-
-func TestRegisterServices(t *testing.T) {
-	s := NewServer(ServerOptions{})
-	svc := &serviceForTest{name: "test"}
-
-	s.RegisterServices(svc)
-	if svc.container != s.App().Services {
-		t.Errorf("expect server app service container passed to service")
-	}
-}

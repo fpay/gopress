@@ -16,7 +16,6 @@ type App struct {
 	*echo.Echo
 
 	Logger   *Logger
-	Services *Container
 }
 
 // AppContext is wrapper of echo.Context. It holds App instance of server.
@@ -24,21 +23,15 @@ type AppContext struct {
 	echo.Context
 
 	app    *App
-	logger *logrus.Entry
 }
 
 func NewAppContext(c echo.Context, app *App, logger *logrus.Entry) *AppContext {
-	return &AppContext{c, app, logger}
+	return &AppContext{c, app}
 }
 
 // App returns the App instance
 func (c *AppContext) App() *App {
 	return c.app
-}
-
-// Logger returns logger entry on current context
-func (c *AppContext) RequestLogger() *logrus.Entry {
-	return c.logger
 }
 
 // NewAppContextMiddleware returns a middleware which extends echo.Context
@@ -50,10 +43,7 @@ func NewAppContextMiddleware(app *App) MiddlewareFunc {
 			requestID := xid.New().String()
 			c.Set(requestIDContextKey, requestID)
 
-			logger := app.Logger.WithField("request_id", requestID)
-			log.WithLogger(c, logger)
-
-			ac := &AppContext{c, app, logger}
+			ac := &AppContext{c, app}
 
 			return next(ac)
 		}
