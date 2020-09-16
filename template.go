@@ -70,6 +70,7 @@ func (t *TemplateRenderer) Parse(name string) (*raymond.Template, error) {
 // registerGlobalPartials 注册全局模板片段
 func (t *TemplateRenderer) registerGlobalPartials() error {
 	root := filepath.Join(t.root, "_partials")
+	root = strings.Replace(root, "\\","/", -1)
 	prefix := root + "/"
 
 	return filepath.Walk(root, func(path string, info os.FileInfo, err error) error {
@@ -80,6 +81,7 @@ func (t *TemplateRenderer) registerGlobalPartials() error {
 			return nil
 		}
 
+		path = strings.Replace(path, "\\","/", -1)
 		parts := strings.Split(path, ".")
 		if len(parts) != 2 || parts[1] != handlebarsExtension {
 			return nil
